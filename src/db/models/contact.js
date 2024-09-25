@@ -12,6 +12,11 @@ const contactSchema = new Schema(
     email: {
       type: String,
     },
+    userId: {
+      type: Schema.Types.ObjectId,
+      ref: 'user',
+      required: true,
+    },
     isFavourite: {
       type: Boolean,
       default: false,

@@ -7,11 +7,22 @@ export const getAllContacts = async ({
   perPage,
   sortOrder = SORT_ORDER.ASC,
   sortBy = '_id',
+  filter = {},
 }) => {
   const limit = perPage;
   const skip = (page - 1) * perPage;
 
   const contactsQuery = ContactCollection.find();
+
+  if (filter.minReleaseYear) {
+    contactsQuery.where('releaseYear').gte(filter.minReleaseYear);
+  }
+  if (filter.maxReleaseYear) {
+    contactsQuery.where('releaseYear').lte(filter.maxReleaseYear);
+  }
+  if (filter.userId) {
+    contactsQuery.where('userId').eq(filter.userId);
+  }
   const contacts = await contactsQuery
     .skip(skip)
     .limit(limit)

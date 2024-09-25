@@ -14,15 +14,18 @@ import {
 } from '../validation/contacts.js';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import { isValidId } from '../middlewares/isValidId.js';
+import { authenticate } from '../middlewares/authenticate.js';
 
 const contactsRouter = Router();
+
+contactsRouter.use(authenticate);
 
 contactsRouter.get('/', ctrlWrapper(getAllContactsController));
 
 contactsRouter.get('/:id', isValidId, ctrlWrapper(getContactsByIdController));
 
 contactsRouter.post(
-  '/',
+  '/register',
   validateBody(createContactSchema),
   ctrlWrapper(createContactsController),
 );

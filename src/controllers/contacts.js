@@ -3,15 +3,19 @@ import createHttpError from 'http-errors';
 import * as contactServices from '../services/contacts.js';
 import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 import { parseSortParams } from '../utils/parseSortParams.js';
+import parseMovieFilterParams from '../utils/filters/parseMovieFilterParams.js';
 
 export const getAllContactsController = async (req, res) => {
   const { page, perPage } = parsePaginationParams(req.query);
   const { sortBy, sortOrder } = parseSortParams(req.query);
+  const filter = parseMovieFilterParams(req.query);
+  const { _id: userId } = req.user;
   const data = await contactServices.getAllContacts({
     page,
     perPage,
     sortBy,
     sortOrder,
+    filter: { ...filter, userId },
   });
   res.json({
     status: 200,
@@ -34,7 +38,8 @@ export const getContactsByIdController = async (req, res) => {
 };
 
 export const createContactsController = async (req, res) => {
-  const data = await contactServices.createContacts(req.body);
+  const { id: userId } = req.user;
+  const data = await contactServices.createContacts({ ...req.body, userId });
   res.status(201).json({
     status: 201,
     message: 'Successfully created a contact!',
