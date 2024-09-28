@@ -25,7 +25,7 @@ contactsRouter.get('/', ctrlWrapper(getAllContactsController));
 contactsRouter.get('/:id', isValidId, ctrlWrapper(getContactsByIdController));
 
 contactsRouter.post(
-  '/register',
+  '/',
   validateBody(createContactSchema),
   ctrlWrapper(createContactsController),
 );
